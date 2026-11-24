@@ -15,14 +15,22 @@ STORY = (
 )
 
 
+def count_sentences(text):
+    """One or two sentences: split on a full stop followed by a space."""
+    parts = [p for p in text.split(". ") if p.strip()]
+    # The last sentence ends with the final full stop, not ". ".
+    return len(parts)
+
+
 def validate(text):
     """The gate: UTF-8 text, 1 to 400 characters, not only whitespace."""
     if not text or text != text.strip():
         raise ValueError("story must be non-empty with no surrounding whitespace")
     if len(text) > 400:
         raise ValueError(f"story is {len(text)} characters, over the 400 limit")
-    if text.count(".") < 1 or text.count(".") > 2:
-        raise ValueError("story must be one or two sentences")
+    sentences = count_sentences(text)
+    if sentences < 1 or sentences > 2:
+        raise ValueError(f"story must be one or two sentences, found {sentences}")
     return text
 
 
